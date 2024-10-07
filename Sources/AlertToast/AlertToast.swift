@@ -123,6 +123,8 @@ public struct AlertToast: View{
         ///Image from Assets
         case image(_ name: String, _ color: Color)
         
+        case swiftUIImage(_ image: Image, _ color: Color)
+        
         ///Loading indicator (Circular)
         case loading
         
@@ -247,6 +249,9 @@ public struct AlertToast: View{
                             .foregroundColor(color)
                     case .loading:
                         ActivityIndicator()
+                    case .swiftUIImage(let image, let color):
+                        image
+                            .foregroundColor(color)
                     case .regular:
                         EmptyView()
                     }
@@ -289,6 +294,10 @@ public struct AlertToast: View{
                         .foregroundColor(color)
                 case .image(let name, let color):
                     Image(name)
+                        .hudModifier()
+                        .foregroundColor(color)
+                case .swiftUIImage(let image, let color):
+                    image
                         .hudModifier()
                         .foregroundColor(color)
                 case .loading:
@@ -352,6 +361,15 @@ public struct AlertToast: View{
             case .image(let name, let color):
                 Spacer()
                 Image(name)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .scaledToFit()
+                    .foregroundColor(color)
+                    .padding(.bottom)
+                Spacer()
+            case .swiftUIImage(let image, let color):
+                Spacer()
+                image
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .scaledToFit()
