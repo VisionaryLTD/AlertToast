@@ -405,16 +405,29 @@ public struct AlertToast: View{
     }
     
     ///Body init determine by `displayMode`
-    public var body: some View{
-        switch displayMode{
-        case .alert:
-            alert
-        case .hud:
-            hud
-        case .banner:
-            banner
+    public var body: some View {
+        Group {
+            switch displayMode{
+            case .alert:
+                alert
+            case .hud:
+                hud
+            case .banner:
+                banner
+            }
+        }
+        .apply {
+            if #available(iOS 17.0, *) {
+                $0.geometryGroup()
+            } else {
+                $0
+            }
         }
     }
+}
+
+extension View {
+    func apply<V: View>(@ViewBuilder _ content: (_ contet: Self) -> V) -> V { content(self) }
 }
 
 @available(iOS 13, macOS 11, *)
