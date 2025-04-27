@@ -437,7 +437,7 @@ public struct AlertToastModifier: ViewModifier{
     @Binding var isPresenting: Bool
     
     ///Duration time to display the alert
-    @State var duration: Double = 2
+    @State var duration: Double = 3
     
     ///Tap to dismiss alert
     @State var tapToDismiss: Bool = true
@@ -450,6 +450,19 @@ public struct AlertToastModifier: ViewModifier{
     ///Completion block returns `true` after dismiss
     var onTap: (() -> ())? = nil
     var completion: (() -> ())? = nil
+    
+    init(isPresenting: Binding<Bool>, duration: TimeInterval, tapToDismiss: Bool, offsetY: CGFloat, alert: @escaping () -> AlertToast, onTap: (() -> Void)? = nil, completion: (() -> Void)? = nil) {
+        _isPresenting = isPresenting
+        _duration = .init(wrappedValue: duration)
+        _tapToDismiss = .init(wrappedValue: tapToDismiss)
+        self.offsetY = offsetY
+        self.alert = alert
+        self.onTap = onTap
+        self.completion = completion
+        self.workItem = workItem
+        self.hostRect = hostRect
+        self.alertRect = alertRect
+    }
     
     @State private var workItem: DispatchWorkItem?
     
@@ -709,7 +722,7 @@ public extension View{
     ///   - show: Binding<Bool>
     ///   - alert: () -> AlertToast
     /// - Returns: `AlertToast`
-    func toast(isPresenting: Binding<Bool>, duration: Double = 2, tapToDismiss: Bool = true, offsetY: CGFloat = 0, alert: @escaping () -> AlertToast, onTap: (() -> ())? = nil, completion: (() -> ())? = nil) -> some View{
+    func toast(isPresenting: Binding<Bool>, duration: Double = 3, tapToDismiss: Bool = true, offsetY: CGFloat = 0, alert: @escaping () -> AlertToast, onTap: (() -> ())? = nil, completion: (() -> ())? = nil) -> some View{
         modifier(AlertToastModifier(isPresenting: isPresenting, duration: duration, tapToDismiss: tapToDismiss, offsetY: offsetY, alert: alert, onTap: onTap, completion: completion))
     }
     
